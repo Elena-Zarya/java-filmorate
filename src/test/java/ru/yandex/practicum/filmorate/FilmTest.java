@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -13,11 +14,13 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FilmTest {
-        private static Validator validator;
-        static {
-            ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-            validator = validatorFactory.usingContext().getValidator();
-        }
+    private static Validator validator;
+
+    @BeforeAll
+    private static void setValidator() {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.usingContext().getValidator();
+    }
 
     @Test
     void validateName() {
@@ -27,7 +30,7 @@ public class FilmTest {
         film.setReleaseDate(LocalDate.parse("2024-12-12"));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
-        assertEquals(1, violations.size(), "Поле имя пустое");
+        assertEquals(1, violations.size(), "Тест аннотации @NotBlank для поля name не пройден");
     }
 
     @Test
@@ -38,7 +41,7 @@ public class FilmTest {
         film.setReleaseDate(LocalDate.parse("2024-12-12"));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
-        assertEquals(1, violations.size(), "Поле имя пустое");
+        assertEquals(1, violations.size(), "Тест аннотации @Positive для поля duration не пройден");
     }
 
     @Test
@@ -49,7 +52,7 @@ public class FilmTest {
         film.setReleaseDate(LocalDate.parse("1895-12-12"));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
-        assertEquals(1, violations.size(), "Поле имя пустое");
+        assertEquals(1, violations.size(), "Тест аннотации @FutureCustom для поля releaseDate не пройден");
     }
 
     @Test
@@ -63,6 +66,6 @@ public class FilmTest {
         film.setReleaseDate(LocalDate.parse("2024-12-12"));
 
         Set<ConstraintViolation<Film>> violations = validator.validate(film);
-        assertEquals(1, violations.size(), "Поле имя пустое");
+        assertEquals(1, violations.size(), "Тест аннотации  @Length для поля description не пройден");
     }
 }

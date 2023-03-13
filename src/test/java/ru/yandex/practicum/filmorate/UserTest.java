@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -12,7 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserTest {
     private static Validator validator;
 
-    static {
+    @BeforeAll
+    public static void setValidator() {
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.usingContext().getValidator();
     }
@@ -24,7 +26,7 @@ public class UserTest {
         user.setLogin("login");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertEquals(1, violations.size(), "Поле email не прошло валидацию");
+        assertEquals(1, violations.size(), "Тест аннотации @Email для поля email не пройден");
     }
 
     @Test
@@ -34,7 +36,7 @@ public class UserTest {
         user.setLogin("login");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertEquals(2, violations.size(), "Поле email не прошло валидацию");
+        assertEquals(2, violations.size(), "Тест аннотации @NotBlank для поля email не пройден");
     }
 
     @Test
@@ -45,7 +47,7 @@ public class UserTest {
         user.setBirthday(LocalDate.parse("2024-12-12"));
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertEquals(1, violations.size(), "Поле email не прошло валидацию");
+        assertEquals(1, violations.size(), "Тест аннотации @Past для поля birthday не пройден");
     }
 
     @Test
@@ -55,6 +57,6 @@ public class UserTest {
         user.setLogin(" ");
 
         Set<ConstraintViolation<User>> violations = validator.validate(user);
-        assertEquals(1, violations.size(), "Поле email не прошло валидацию");
+        assertEquals(1, violations.size(), "Тест аннотации @NotBlank для поля login не пройден");
     }
 }

@@ -1,10 +1,12 @@
 package ru.yandex.practicum.filmorate.dao;
 
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
     private long id;
