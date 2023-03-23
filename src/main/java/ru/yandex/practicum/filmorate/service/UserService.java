@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.dao.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.dao.user.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -10,12 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final UserStorage userStorage;
-
-    public UserService(InMemoryUserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
 
     public User addFriend(long userId, long friendId) {
         User user = userStorage.getUser(userId);
