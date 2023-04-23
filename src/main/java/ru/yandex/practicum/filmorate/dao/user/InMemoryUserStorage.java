@@ -1,9 +1,10 @@
 package ru.yandex.practicum.filmorate.dao.user;
 
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,21 +26,26 @@ public class InMemoryUserStorage implements UserStorage {
         if (users.containsKey(id)) {
             users.put(id, user);
         } else {
-            throw new UserNotFoundException("Пользователь с id: " + id + "не найден");
+            throw new NotFoundException("Пользователь с id: " + id + "не найден");
         }
     }
 
     @Override
     public void deleteUser(long id) {
         if (!users.containsKey(id)) {
-            throw new UserNotFoundException("Пользователь с id: " + id + "не найден");
+            throw new NotFoundException("Пользователь с id: " + id + "не найден");
         }
         users.remove(id);
     }
 
-    @Override
+
     public Map<Long, User> getUsers() {
         return users;
+    }
+
+    @Override
+    public Collection<User> getAllUsers() {
+        return null;
     }
 
     private long generateId() {
@@ -54,8 +60,23 @@ public class InMemoryUserStorage implements UserStorage {
 
     public User getUser(long id) {
         if (!users.containsKey(id)) {
-            throw new UserNotFoundException("Пользователь с id: " + id + " не найден");
+            throw new NotFoundException("Пользователь с id: " + id + " не найден");
         }
         return users.get(id);
+    }
+
+    @Override
+    public Collection<User> getAllFriendsUser(long userId) {
+        return null;
+    }
+
+    @Override
+    public User addFriend(long userId, long friendId) {
+        return null;
+    }
+
+    @Override
+    public User deleteFriend(long userId, long friendId) {
+        return null;
     }
 }

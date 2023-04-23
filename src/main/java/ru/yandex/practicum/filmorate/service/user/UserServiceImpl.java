@@ -1,18 +1,21 @@
-package ru.yandex.practicum.filmorate.service;
+package ru.yandex.practicum.filmorate.service.user;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.dao.user.UserStorage;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
-@RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
+
+
     private final UserStorage userStorage;
+
+    public UserServiceImpl(@Qualifier("inMemoryUserStorage") UserStorage userStorage) {
+        this.userStorage = userStorage;
+    }
 
     public User addFriend(long userId, long friendId) {
         User user = userStorage.getUser(userId);
@@ -49,5 +52,27 @@ public class UserService {
             }
         }
         return friendsCommonList;
+    }
+
+    @Override
+    public User addUser(User user) {
+        userStorage.addUser(user);
+        return user;
+    }
+
+    @Override
+    public User updateUser(User user) {
+        userStorage.updateUser(user);
+        return user;
+    }
+
+    @Override
+    public Collection<User> getAllUsers() {
+        return null;
+    }
+
+    @Override
+    public User getUser(long userId) {
+        return null;
     }
 }
