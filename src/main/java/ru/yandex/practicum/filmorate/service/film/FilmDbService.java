@@ -30,7 +30,7 @@ public class FilmDbService implements FilmService {
 
     @Override
     public List<Film> getFilmsMaxLike(int count) {
-        if (count <= 0) {
+        if (count <=0) {
             throw new IncorrectParameterException("count");
         }
         return filmStorage.getFilmsMaxLike(count);
