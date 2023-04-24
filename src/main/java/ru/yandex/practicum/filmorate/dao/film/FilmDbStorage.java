@@ -9,6 +9,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Rating;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -62,14 +63,14 @@ public class FilmDbStorage implements FilmStorage {
                     film.getMpa().getId(), filmId);
 
             jdbcTemplate.update("DELETE FROM film_genre WHERE film_id = ?", filmId);
-                for (Genre genre : film.getGenres()) {
-                    SqlRowSet filmGenreRows = jdbcTemplate.queryForRowSet("SELECT* FROM film_genre " +
-                            "WHERE film_id = ? AND genre_id = ?", filmId, genre.getId());
-                    if (!filmGenreRows.next()) {
-                        jdbcTemplate.update("INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?)",
-                                filmId, genre.getId());
-                    }
+            for (Genre genre : film.getGenres()) {
+                SqlRowSet filmGenreRows = jdbcTemplate.queryForRowSet("SELECT* FROM film_genre " +
+                        "WHERE film_id = ? AND genre_id = ?", filmId, genre.getId());
+                if (!filmGenreRows.next()) {
+                    jdbcTemplate.update("INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?)",
+                            filmId, genre.getId());
                 }
+            }
             log.info("Обновлены данные фильма: {} {}", filmId, film.getName());
         } else {
             log.info("Фильм с ID {} не найден.", filmId);
@@ -82,15 +83,15 @@ public class FilmDbStorage implements FilmStorage {
     public void deleteFilm(long id) {
         SqlRowSet filmRows = jdbcTemplate.queryForRowSet("SELECT* FROM films WHERE film_id = ?", id);
         if (filmRows.next()) {
-        SqlRowSet filmGenreRows = jdbcTemplate.queryForRowSet("SELECT* FROM film_genre WHERE film_id = ?", id);
-        if (filmGenreRows.next()) {
-            jdbcTemplate.update("DELETE FROM film_genre WHERE film_id = ?", id);
-        }
+            SqlRowSet filmGenreRows = jdbcTemplate.queryForRowSet("SELECT* FROM film_genre WHERE film_id = ?", id);
+            if (filmGenreRows.next()) {
+                jdbcTemplate.update("DELETE FROM film_genre WHERE film_id = ?", id);
+            }
             SqlRowSet filmLikesRows = jdbcTemplate.queryForRowSet("SELECT* FROM film_likes WHERE film_id = ?", id);
             if (filmLikesRows.next()) {
                 jdbcTemplate.update("DELETE FROM film_likes WHERE film_id = ?", id);
             }
-                jdbcTemplate.update("DELETE FROM films WHERE film_id = ?", id);
+            jdbcTemplate.update("DELETE FROM films WHERE film_id = ?", id);
             log.info("Удален фильм с id: {} ", id);
         } else {
             log.info("Фильм с ID {} не найден.", id);
@@ -134,7 +135,7 @@ public class FilmDbStorage implements FilmStorage {
             List<Genre> genres = jdbcTemplate.query(sqlQueryGenre, this::mapRowToGenre, filmId);
             Rating mpa = jdbcTemplate.queryForObject(sqlQueryRating, this::mapRowToRating, filmId);
             SqlRowSet filmRows = jdbcTemplate.queryForRowSet(sqlQueryLikes, filmId);
-            if (filmRows.next()){
+            if (filmRows.next()) {
                 film.getLikes().add(filmRows.getLong("user_id"));
             }
             film.setGenres(genres);
@@ -201,7 +202,7 @@ public class FilmDbStorage implements FilmStorage {
                     "GROUP BY f.film_id " +
                     "ORDER BY count_likes DESC " +
                     "LIMIT ?";
-            topFilms = jdbcTemplate.query(sqlQuery,this::mapRowToFilms, count);
+            topFilms = jdbcTemplate.query(sqlQuery, this::mapRowToFilms, count);
             for (Film film : topFilms) {
                 String sqlQueryRating = "SELECT r.rating_id, r.rating_name FROM rating r " +
                         "JOIN films f ON f.rating_id = r.rating_id WHERE f.film_id = ?";
