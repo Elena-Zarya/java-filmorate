@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.dao.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,10 +14,9 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 
-
+@Slf4j
 @Component
 public class UserDbStorage implements UserStorage {
-    private final Logger log = LoggerFactory.getLogger(UserDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
 
     public UserDbStorage(JdbcTemplate jdbcTemplate) {

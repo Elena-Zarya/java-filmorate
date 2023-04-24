@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.dao.film;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,9 +15,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+@Slf4j
 @Component
 public class FilmDbStorage implements FilmStorage {
-    private final Logger log = LoggerFactory.getLogger(FilmDbStorage.class);
     private final JdbcTemplate jdbcTemplate;
 
     public FilmDbStorage(JdbcTemplate jdbcTemplate) {
@@ -153,11 +154,7 @@ public class FilmDbStorage implements FilmStorage {
         if (filmRows.next()) {
             SqlRowSet userRows = jdbcTemplate.queryForRowSet("SELECT* FROM users WHERE user_id = ?", userId);
             if (userRows.next()) {
-                SqlRowSet filmLikeRows = jdbcTemplate.queryForRowSet("SELECT* FROM film_likes " +
-                        "WHERE film_id = ? AND user_id = ?", filmId, userId);
-                if (!filmLikeRows.next()) {
-                    jdbcTemplate.update("INSERT INTO film_likes (film_id, user_id) VALUES (?, ?)", filmId, userId);
-                }
+                jdbcTemplate.update("MERGE INTO film_likes (film_id, user_id) VALUES (?, ?)", filmId, userId);
             } else {
                 throw new NotFoundException("Пользователь с id: " + userId + " не найден");
             }

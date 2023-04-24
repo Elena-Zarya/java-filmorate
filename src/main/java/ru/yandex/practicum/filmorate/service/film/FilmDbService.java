@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class FilmDbService implements FilmService {
 
-    FilmStorage filmStorage;
+    private final FilmStorage filmStorage;
 
     public FilmDbService(@Qualifier("filmDbStorage") FilmStorage filmStorage) {
         this.filmStorage = filmStorage;

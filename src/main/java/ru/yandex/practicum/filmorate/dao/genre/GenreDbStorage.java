@@ -38,7 +38,6 @@ public class GenreDbStorage implements GenreStorage {
         genre.setName(resultSet.getString("genre_name"));
         return genre;
     }
-
 }
 
 
