@@ -127,9 +127,9 @@ public class UserDbStorage implements UserStorage {
             if (userFriendRows.next()) {
                 jdbcTemplate.update("DELETE FROM user_friends WHERE user_id = ? AND friend_id = ?",
                         userId, friendId);
-                SqlRowSet FriendRows = jdbcTemplate.queryForRowSet("SELECT* FROM user_friends WHERE user_id = ? A" +
+                SqlRowSet friendRows = jdbcTemplate.queryForRowSet("SELECT* FROM user_friends WHERE user_id = ? A" +
                         "ND friend_id = ?", friendId, userId);
-                if (FriendRows.next()) {
+                if (friendRows.next()) {
                     jdbcTemplate.update("UPDATE user_friends SET status = ? WHERE user_id = ? AND friend_id = ?",
                             false, friendId, userId);
                 }
